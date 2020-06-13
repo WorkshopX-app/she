@@ -1,2 +1,3 @@
 # she
-General lib For Golang
+
+General function & lib For Golang
