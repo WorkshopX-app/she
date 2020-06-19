@@ -90,8 +90,8 @@ func (c *LRUCache) Get(key Key) (value interface{}, ok bool) {
 
 // Remove removes the provided key from the cache.
 func (c *LRUCache) Remove(key Key) {
-	defer c.mutex.Unlock()
-	c.mutex.Lock()
+	defer c.mux.Unlock()
+	c.mux.Lock()
 
 	if c.cache == nil {
 		return
@@ -103,8 +103,8 @@ func (c *LRUCache) Remove(key Key) {
 
 // RemoveOldest removes the oldest item from the cache.
 func (c *LRUCache) RemoveOldest() {
-	defer c.mutex.Unlock()
-	c.mutex.Lock()
+	defer c.mux.Unlock()
+	c.mux.Lock()
 
 	if c.cache == nil {
 		return
@@ -116,8 +116,8 @@ func (c *LRUCache) RemoveOldest() {
 }
 
 func (c *LRUCache) removeElement(e *list.Element) {
-	defer c.mutex.Unlock()
-	c.mutex.Lock()
+	defer c.mux.Unlock()
+	c.mux.Lock()
 
 	c.ll.Remove(e)
 	kv := e.Value.(*entry)
@@ -129,8 +129,8 @@ func (c *LRUCache) removeElement(e *list.Element) {
 
 // Len returns the number of items in the cache.
 func (c *LRUCache) Len() int {
-	defer c.mutex.Unlock()
-	c.mutex.Lock()
+	defer c.mux.Unlock()
+	c.mux.Lock()
 
 	if c.cache == nil {
 		return 0
