@@ -65,7 +65,7 @@ func (c *LRUCache) Add(key Key, value interface{}) {
 	ele := c.ll.PushFront(&entry{key, value})
 	c.cache[key] = ele
 	if c.MaxEntries != 0 && c.ll.Len() > c.MaxEntries {
-		c.RemoveOldest()
+		c.removeOldest()
 	}
 }
 
@@ -101,10 +101,8 @@ func (c *LRUCache) Remove(key Key) {
 	}
 }
 
-// RemoveOldest removes the oldest item from the cache.
-func (c *LRUCache) RemoveOldest() {
-	defer c.mux.Unlock()
-	c.mux.Lock()
+// removeOldest removes the oldest item from the cache.
+func (c *LRUCache) removeOldest() {
 
 	if c.cache == nil {
 		return
@@ -116,9 +114,6 @@ func (c *LRUCache) RemoveOldest() {
 }
 
 func (c *LRUCache) removeElement(e *list.Element) {
-	defer c.mux.Unlock()
-	c.mux.Lock()
-
 	c.ll.Remove(e)
 	kv := e.Value.(*entry)
 	delete(c.cache, kv.key)
